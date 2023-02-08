@@ -24,11 +24,22 @@ contract BuyMeACoffee {
     }
 
     function buyCoffee(string memory _name, string memory _message)
-        public
+        external
         payable
     {
         require(msg.value > 0, "can't buy coffe with 0 eth");
         memos.push(Memo(msg.sender, _name, _message, block.timestamp));
         emit NewMemo(msg.sender, _name, _message, block.timestamp);
+    }
+
+    function withdraw() external {
+        require(owner == msg.sender, "only owner can withdraw");
+        require(address(this).balance > 0, "require balance to withdraw");
+        (bool sent, ) = owner.call{value: address(this).balance}("");
+        require(sent, "transfer failed");
+    }
+
+    function getMemos() public view returns (Memo[] memory) {
+        return memos;
     }
 }
