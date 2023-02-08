@@ -6,7 +6,12 @@
 // global scope, and execute the script.
 const hre = require("hardhat");
 
-async function main() {}
+async function main() {
+  const Contract = await hre.ethers.getContractFactory("BuyMeACoffee");
+  const contract = await Contract.deploy();
+  await contract.deployed();
+  console.log(`Buy me a coffe contract is deployed to ${contract.address}`);
+}
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
